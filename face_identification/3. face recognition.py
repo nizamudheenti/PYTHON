@@ -1,17 +1,8 @@
-''''
-Real Time Face Recogition
-	==> Each face stored on dataset/ dir, should have a unique numeric integer ID as 1, 2, 3, etc                       
-	==> LBPH computed model (trained faces) should be on trainer/ dir
-Based on original code by Anirban Kar: https://github.com/thecodacus/Face-Recognition    
-
-Developed by Marcelo Rovai - MJRoBot.org @ 21Feb18  
-
-'''
-
 import cv2
 import numpy as np
 import os 
-
+import pandas as pd
+names=pd.read_csv('name.csv',index_col='no')
 recognizer = cv2.face.LBPHFaceRecognizer_create()
 recognizer.read('trainer/trainer.yml')   #load trained model
 cascadePath = "haarcascade_frontalface_default.xml"
@@ -20,10 +11,8 @@ faceCascade = cv2.CascadeClassifier(cascadePath);
 font = cv2.FONT_HERSHEY_SIMPLEX
 
 #iniciate id counter, the number of persons you want to include
-id = 10 #two persons (e.g. Jacob, Jack)
-
-
-names = ['','nizam','mohammed']  #key in names, start from the second place, leave first empty
+#id = len(dataid) #two persons (e.g. Jacob, Jack)
+#key in names, start from the second place, leave first empty
 
 # Initialize and start realtime video capture
 cam = cv2.VideoCapture(0)
@@ -55,7 +44,7 @@ while True:
 
         # Check if confidence is less them 100 ==> "0" is perfect match 
         if (confidence < 100):
-            id = names[id]
+            id = names.iloc[id,0]
             confidence = "  {0}%".format(round(100 - confidence))
         else:
             id = "unknown"
